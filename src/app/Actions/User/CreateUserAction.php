@@ -2,7 +2,7 @@
 
 namespace App\Actions\User;
 
-use App\DTO\User\RegisterUserDTO;
+use App\DTO\User\CreateUserDTO;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -19,11 +19,11 @@ class CreateUserAction
     /**
      * Executa a ação de criar um usuário
      *
-     * @param RegisterUserDTO $dto
+     * @param CreateUserDTO $dto
      * @return \App\Models\User
      * @throws ValidationException
      */
-    public function execute(RegisterUserDTO $dto)
+    public function execute(CreateUserDTO $dto)
     {
         // Verifica se email ou CPF/CNPJ já existem
         if ($this->userRepository->existsByEmail($dto->email)) {

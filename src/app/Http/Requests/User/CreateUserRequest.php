@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 use App\Enums\UserType;
 
-class RegisterUserRequest extends FormRequest
+class CreateUserRequest extends FormRequest
 {
     /**
      * Determina se o usuário está autorizado a fazer essa requisição.
@@ -34,9 +34,9 @@ class RegisterUserRequest extends FormRequest
     /**
      * Converte a request em DTO.
      */
-    public function toDTO(): \App\DTO\User\RegisterUserDTO
+    public function toDTO(): \App\DTO\User\CreateUserDTO
     {
-        return new \App\DTO\User\RegisterUserDTO(
+        return new \App\DTO\User\CreateUserDTO(
             name: $this->input('name'),
             cpf_cnpj: $this->input('cpf_cnpj'),
             email: $this->input('email'),

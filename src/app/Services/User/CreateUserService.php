@@ -3,10 +3,10 @@
 namespace App\Services\User;
 
 use App\Actions\User\CreateUserAction;
-use App\DTO\User\RegisterUserDTO;
+use App\DTO\User\CreateUserDTO;
 use App\Models\User;
 
-class RegisterUserService
+class CreateUserService
 {
     private CreateUserAction $createUserAction;
 
@@ -18,12 +18,11 @@ class RegisterUserService
     /**
      * Registra um novo usuário
      *
-     * @param RegisterUserDTO $dto
+     * @param CreateUserDTO $dto
      * @return User
      */
-    public function register(RegisterUserDTO $dto): User
+    public function register(CreateUserDTO $dto): User
     {
-        // Aqui você pode adicionar regras de negócio extras, logs, eventos, etc.
         return $this->createUserAction->execute($dto);
     }
 }

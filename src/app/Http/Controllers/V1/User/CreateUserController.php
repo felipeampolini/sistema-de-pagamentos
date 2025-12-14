@@ -3,26 +3,26 @@
 namespace App\Http\Controllers\V1\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\RegisterUserRequest;
-use App\Services\User\RegisterUserService;
+use App\Http\Requests\User\CreateUserRequest;
+use App\Services\User\CreateUserService;
 use Illuminate\Http\JsonResponse;
 
-class RegisterUserController extends Controller
+class CreateUserController extends Controller
 {
-    private RegisterUserService $registerUserService;
+    private CreateUserService $CreateUserService;
 
-    public function __construct(RegisterUserService $registerUserService)
+    public function __construct(CreateUserService $CreateUserService)
     {
-        $this->registerUserService = $registerUserService;
+        $this->CreateUserService = $CreateUserService;
     }
 
     /**
      * Endpoint para registrar um novo usuário
      */
-    public function __invoke(RegisterUserRequest $request): JsonResponse
+    public function __invoke(CreateUserRequest $request): JsonResponse
     {
         $dto = $request->toDTO();
-        $user = $this->registerUserService->register($dto);
+        $user = $this->CreateUserService->register($dto);
 
         return response()->json([
             'message' => 'Usuário registrado com sucesso!',
