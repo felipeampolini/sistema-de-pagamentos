@@ -6,9 +6,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class WithdrawRequest extends FormRequest
 {
+    
     public function authorize(): bool
     {
-        return true;
+        return auth()->check();
     }
 
     public function rules(): array
@@ -22,8 +23,8 @@ class WithdrawRequest extends FormRequest
     {
         return [
             'amount.required' => 'O valor do saque é obrigatório.',
-            'amount.numeric'  => 'O valor do saque deve ser numérico.',
-            'amount.min'      => 'O valor do saque deve ser maior que zero.',
+            'amount.numeric' => 'O valor do saque deve ser numérico.',
+            'amount.min' => 'O valor do saque deve ser maior que zero.',
         ];
     }
 }
