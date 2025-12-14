@@ -5,11 +5,25 @@ namespace App\Actions\Transfer;
 use App\DTO\Transfer\SendTransferDTO;
 use App\Models\User;
 use App\Models\Transfer;
+use App\Services\Notifiers\NotifierInterface;
+use App\Validators\Transfer\SendTransferValidator;
 use Illuminate\Support\Facades\DB;
 use Exception;
+use App\Services\Authorizers\AuthorizerInterface;
 
 class SendTransferAction
 {
+    private AuthorizerInterface $authorizer;
+    private NotifierInterface $notifier;
+    private SendTransferValidator $validator;
+
+    public function __construct(AuthorizerInterface $authorizer, NotifierInterface $notifier, SendTransferValidator $validator)
+    {
+        $this->authorizer = $authorizer;
+        $this->notifier = $notifier;
+        $this->validator = $validator;
+    }
+
     /**
      * Executa a transferência.
      *
@@ -17,17 +31,13 @@ class SendTransferAction
      */
     public function execute(SendTransferDTO $dto): Transfer
     {
-        // Recupera remetente e destinatário
-        $sender = $dto->sender_id ? User::findOrFail($dto->sender_id) : null;
+        $sender = User::findOrFail($dto->sender_id);
         $receiver = User::findOrFail($dto->receiver_id);
 
-        // Validação: remetente não pode enviar mais que o saldo disponível
-        if ($sender && $sender->balance < $dto->amount) {
-            throw new Exception("Saldo insuficiente para realizar a transferência.");
-        }
+        $this->validator->validate($dto, $sender, $receiver);
 
-        // Mock de serviço externo de autorização
-        if (!$this->authorizeExternal()) {
+        // Authorize é uma interface, que permite multiplas opcoes de autorizacoes
+        if (!$this->authorizer->authorize($dto->amount, $dto->sender_id, $dto->receiver_id)) {
             throw new Exception("Transferência não autorizada pelo serviço externo.");
         }
 
@@ -48,7 +58,6 @@ class SendTransferAction
                 'status' => 'completed',
             ]);
 
-            // Mock de notificação (pode ser log ou e-mail simulado)
             $this->notifyUsers($sender, $receiver, $dto->amount);
 
             return $transfer;
@@ -56,24 +65,20 @@ class SendTransferAction
     }
 
     /**
-     * Simula serviço externo de autorização
+     * Notifica os envolvidos que a transação foi feita
+     * @param User $sender
+     * @param User $receiver
+     * @param float $amount
+     * @return void
      */
-    private function authorizeExternal(): bool
+    private function notifyUsers(User $sender, User $receiver, float $amount): void
     {
-        // Retorna sempre true para o mock
-        return true;
-    }
+        $amount = number_format($amount, 2, ',', '.');
 
-    /**
-     * Simula notificação para remetente e destinatário
-     */
-    private function notifyUsers(?User $sender, User $receiver, float $amount): void
-    {
-        if ($sender) {
-            // Simulação: log ou print
-            logger("Notificação: {$sender->name} enviou R$ {$amount} para {$receiver->name}");
-        }
+        $messageToSender = "Você transferiu R$ " . $amount . " para o usuário " . $receiver->name;
+        $messageToReceiver = "Você recebeu uma transferencia de R$ ".$amount." do usuário ".$sender->name;
 
-        logger("Notificação: {$receiver->name} recebeu R$ {$amount}" . ($sender ? " de {$sender->name}" : ""));
+        $this->notifier->notify($sender->id, $messageToSender);
+        $this->notifier->notify($receiver->id, $messageToReceiver);
     }
 }

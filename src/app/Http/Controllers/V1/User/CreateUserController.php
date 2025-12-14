@@ -32,6 +32,7 @@ class CreateUserController extends Controller
                 'email' => $user->email,
                 'cpf_cnpj' => $user->cpf_cnpj,
                 'type' => $user->type,
+                'phone' => $user->phone,
                 'balance' => $user->balance,
                 'created_at' => $user->created_at,
             ],

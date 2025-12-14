@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests\User;
 
+use App\DTO\User\CreateUserDTO;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
-use App\Enums\UserType;
 
 class CreateUserRequest extends FormRequest
 {
@@ -21,21 +20,23 @@ class CreateUserRequest extends FormRequest
             'password' => ['required', 'string', 'min:6'],
             'balance' => ['required', 'numeric', 'min:0'],
             'type' => ['required', 'string', 'in:common,merchant'],
+            'phone' => ['required', 'string', 'max:255']
         ];
     }
 
     /**
      * Converte a request em DTO.
      */
-    public function toDTO(): \App\DTO\User\CreateUserDTO
+    public function toDTO(): CreateUserDTO
     {
-        return new \App\DTO\User\CreateUserDTO(
+        return new CreateUserDTO(
             name: $this->input('name'),
             cpf_cnpj: $this->input('cpf_cnpj'),
             email: $this->input('email'),
             password: $this->input('password'),
             balance: (float) $this->input('balance'),
             type: $this->input('type'),
+            phone: $this->input('phone')
         );
     }
 }

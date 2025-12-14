@@ -10,6 +10,7 @@ readonly class CreateUserDTO
         public string $email,
         public string $password,
         public float $balance,
-        public string $type // 'common' ou 'merchant'
+        public string $type, // 'common' ou 'merchant'
+        public string $phone
     ) {}
 }

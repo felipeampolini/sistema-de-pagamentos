@@ -38,6 +38,7 @@ class CreateUserAction
             'password' => Hash::make($dto->password),
             'balance' => $dto->balance,
             'type' => $dto->type,
+            'phone' => $dto->phone
         ]);
     }
 }

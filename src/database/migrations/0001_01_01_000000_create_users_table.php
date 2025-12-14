@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->decimal('balance', 15, 2)->default(0);
             $table->enum('type', ['common', 'merchant']);
+            $table->string('phone')->nullable();
             $table->timestamps();
         });
 
