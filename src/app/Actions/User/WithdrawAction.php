@@ -5,6 +5,7 @@ namespace App\Actions\User;
 use App\Models\User;
 use App\Validators\User\WithdrawValidator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 class WithdrawAction
@@ -21,6 +22,12 @@ class WithdrawAction
 
             $user->balance -= $amount;
             $user->save();
+
+            Log::channel('user')->info('Saque efetuado', [
+                'Id' => $user->id,
+                'nome' => $user->name,
+                'valor' => $amount
+            ]);
 
             return $user;
         });

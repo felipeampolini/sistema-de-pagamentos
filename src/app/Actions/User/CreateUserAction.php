@@ -3,9 +3,11 @@
 namespace App\Actions\User;
 
 use App\DTO\User\CreateUserDTO;
+use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Validators\User\CreateUserValidator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class CreateUserAction
@@ -31,7 +33,7 @@ class CreateUserAction
         $this->validator->validate($this->userRepository, $dto);
 
         // Cria o usuário
-        return $this->userRepository->create([
+        $user = $this->userRepository->create([
             'name' => $dto->name,
             'email' => $dto->email,
             'cpf_cnpj' => $dto->cpf_cnpj,
@@ -40,5 +42,17 @@ class CreateUserAction
             'type' => $dto->type,
             'phone' => $dto->phone
         ]);
+
+        // Aqui poderia disparar um evento pra que um logging service que estive ouvindo, pudesse escrever o log de fato
+        if($user instanceof User){
+            Log::channel('user')->info('Usuário criado', [
+                'Id' => $user->id,
+                'nome' => $user->name,
+                'tipo' => $user->type
+            ]);
+        }
+
+        return $user;
+
     }
 }

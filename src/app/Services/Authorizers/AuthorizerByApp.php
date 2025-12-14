@@ -2,6 +2,8 @@
 
 namespace App\Services\Transfer\Authorizers;
 
+use App\Services\Authorizers\AuthorizerInterface;
+
 class AuthorizerByApp implements AuthorizerInterface
 {
     public function authorize(float $amount, int $senderId, int $receiverId): bool

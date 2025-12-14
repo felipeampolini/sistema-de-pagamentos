@@ -58,6 +58,18 @@ return [
             'ignore_exceptions' => false,
         ],
 
+        'user' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/user.log'),
+            'level' => 'info',
+        ],
+
+        'transfer' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/transfer.log'),
+            'level' => 'info',
+        ],
+
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),

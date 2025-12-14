@@ -10,6 +10,7 @@ use App\Validators\Transfer\SendTransferValidator;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Services\Authorizers\AuthorizerInterface;
+use Illuminate\Support\Facades\Log;
 
 class SendTransferAction
 {
@@ -59,6 +60,12 @@ class SendTransferAction
             ]);
 
             $this->notifyUsers($sender, $receiver, $dto->amount);
+
+            Log::channel('transfer')->info('Transferência realizada', [
+                'Transferido do usuario' => $sender->id,
+                'para o usuario' => $receiver->id,
+                'valor' => $dto->amount
+            ]);
 
             return $transfer;
         });

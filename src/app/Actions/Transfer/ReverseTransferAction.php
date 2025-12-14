@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Repositories\TransferRepository;
 use App\Validators\Transfer\ReverseTransferValidator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ReverseTransferAction
 {
@@ -37,11 +38,19 @@ class ReverseTransferAction
             $transfer->reversed_at = now();
             $transfer->save();
 
-            $sender->balance += $transfer->amount;
+            $amount = (float)$transfer->amount;
+
+            $sender->balance += $amount;
             $sender->save();
 
-            $receiver->balance -= $transfer->amount;
+            $receiver->balance -= $amount;
             $receiver->save();
+
+            Log::channel('transfer')->info('Estorno realizado', [
+                'Estornado do usuario' => $receiver->id,
+                'para o usuario' => $sender->id,
+                'valor' => $amount
+            ]);
 
             return $transfer;
         });

@@ -4,6 +4,7 @@ namespace App\Actions\User;
 
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DepositAction
 {
@@ -13,6 +14,12 @@ class DepositAction
 
             $user->balance += $amount;
             $user->save();
+
+            Log::channel('user')->info('Deposito efetuado', [
+                'Id' => $user->id,
+                'nome' => $user->name,
+                'valor' => $amount
+            ]);
 
             return $user;
         });
