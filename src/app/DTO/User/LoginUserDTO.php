@@ -2,14 +2,10 @@
 
 namespace App\DTO\User;
 
-class LoginUserDTO
+readonly class LoginUserDTO
 {
-    public string $email;
-    public string $password;
-
-    public function __construct(array $data)
-    {
-        $this->email = $data['email'];
-        $this->password = $data['password'];
-    }
+    public function __construct(
+        public string $email,
+        public string $password
+    ) {}
 }

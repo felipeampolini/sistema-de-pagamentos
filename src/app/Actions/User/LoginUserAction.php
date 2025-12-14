@@ -4,20 +4,18 @@ namespace App\Actions\User;
 
 use App\DTO\User\LoginUserDTO;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use App\Validators\User\LoginUserValidator;
 
 class LoginUserAction
 {
+    public function __construct(private LoginUserValidator $validator){
+    }
+
     public function execute(LoginUserDTO $dto): User
     {
         $user = User::where('email', $dto->email)->first();
 
-        if (!$user || !Hash::check($dto->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['Email ou senha inválidos.'],
-            ]);
-        }
+        $this->validator->validate($user, $dto);
 
         return $user;
     }
