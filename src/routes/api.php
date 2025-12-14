@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\V1\Transfer\ReverseTransferController;
 use App\Http\Controllers\V1\Transfer\SendTransferController;
 use App\Http\Controllers\V1\User\DepositController;
 use App\Http\Controllers\V1\User\MyBalanceController;
@@ -14,8 +15,16 @@ Route::prefix('v1')->group(function () {
 });
 
 Route::middleware(['api', 'auth:api'])->prefix('v1')->group(function () {
-    Route::post('/transfer', SendTransferController::class);
-    Route::get('/users/my-balance', MyBalanceController::class);
-    Route::post('/users/deposit', DepositController::class);
-    Route::post('/users/withdraw', WithdrawController::class);
+
+    Route::prefix('users')->group(function () {
+        Route::get('/my-balance', MyBalanceController::class);
+        Route::post('/deposit', DepositController::class);
+        Route::post('/withdraw', WithdrawController::class);
+    });
+
+    Route::prefix('transfer')->group(function () {
+        Route::post('/send', SendTransferController::class);
+        Route::post('/reverse', ReverseTransferController::class);
+    });
+
 });

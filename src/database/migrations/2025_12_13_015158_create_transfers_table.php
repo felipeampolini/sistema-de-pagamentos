@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('receiver_id')->constrained('users')->onDelete('CASCADE'); // destinatário
             $table->decimal('amount', 15, 2);
             $table->enum('status', ['pending', 'completed', 'reversed'])->default('pending');
+            $table->timestamp('reversed_at')->nullable()->default(null);
             $table->timestamps();
         });
     }
