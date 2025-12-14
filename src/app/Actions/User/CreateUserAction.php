@@ -4,6 +4,7 @@ namespace App\Actions\User;
 
 use App\DTO\User\CreateUserDTO;
 use App\Repositories\UserRepository;
+use App\Validators\User\CreateUserValidator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -11,7 +12,7 @@ class CreateUserAction
 {
     private UserRepository $userRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, private CreateUserValidator $validator)
     {
         $this->userRepository = $userRepository;
     }
@@ -25,14 +26,9 @@ class CreateUserAction
      */
     public function execute(CreateUserDTO $dto)
     {
-        // Verifica se email ou CPF/CNPJ já existem
-        if ($this->userRepository->existsByEmail($dto->email)) {
-            throw ValidationException::withMessages(['email' => 'Este e-mail já está em uso.']);
-        }
 
-        if ($this->userRepository->existsByCpfCnpj($dto->cpf_cnpj)) {
-            throw ValidationException::withMessages(['cpf_cnpj' => 'Este CPF/CNPJ já está em uso.']);
-        }
+        // Validação dupla por garantia, Caso passe pelo CreateUserRequest, valido por aqui também.
+        $this->validator->validate($this->userRepository, $dto);
 
         // Cria o usuário
         return $this->userRepository->create([
