@@ -8,13 +8,6 @@ use App\Enums\UserType;
 
 class CreateUserRequest extends FormRequest
 {
-    /**
-     * Determina se o usuário está autorizado a fazer essa requisição.
-     */
-    public function authorize(): bool
-    {
-        return true; // cadastro aberto
-    }
 
     /**
      * Regras de validação.
