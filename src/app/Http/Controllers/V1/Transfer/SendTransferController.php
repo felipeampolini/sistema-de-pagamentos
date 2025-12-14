@@ -3,26 +3,26 @@
 namespace App\Http\Controllers\V1\Transfer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Transfer\TransferRequest;
-use App\DTO\Transfer\TransferDTO;
-use App\Services\Transfer\TransferService;
+use App\Http\Requests\Transfer\SendTransferRequest;
+use App\DTO\Transfer\SendTransferDTO;
+use App\Services\Transfer\SendTransferService;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class TransferController extends Controller
+class SendTransferController extends Controller
 {
-    private TransferService $service;
+    private SendTransferService $service;
 
-    public function __construct(TransferService $service)
+    public function __construct(SendTransferService $service)
     {
         $this->service = $service;
     }
 
-    public function __invoke(TransferRequest $request): JsonResponse
+    public function __invoke(SendTransferRequest $request): JsonResponse
     {
         $user = JWTAuth::parseToken()->authenticate();
 
-        $dto = new TransferDTO(array_merge(
+        $dto = new SendTransferDTO(array_merge(
             $request->validated(),
             ['sender_id' => $user->id]
         ));

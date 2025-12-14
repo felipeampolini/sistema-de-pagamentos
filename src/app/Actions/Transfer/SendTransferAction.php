@@ -2,20 +2,20 @@
 
 namespace App\Actions\Transfer;
 
-use App\DTO\Transfer\TransferDTO;
+use App\DTO\Transfer\SendTransferDTO;
 use App\Models\User;
 use App\Models\Transfer;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
-class CreateTransferAction
+class SendTransferAction
 {
     /**
      * Executa a transferência.
      *
      * @throws Exception se houver saldo insuficiente ou falha na autorização
      */
-    public function execute(TransferDTO $dto): Transfer
+    public function execute(SendTransferDTO $dto): Transfer
     {
         // Recupera remetente e destinatário
         $sender = $dto->sender_id ? User::findOrFail($dto->sender_id) : null;

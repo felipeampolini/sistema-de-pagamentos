@@ -2,7 +2,7 @@
 
 namespace App\DTO\Transfer;
 
-class TransferDTO
+class SendTransferDTO
 {
     public ?int $sender_id;
     public int $receiver_id;

@@ -4,7 +4,7 @@ namespace App\Http\Requests\Transfer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TransferRequest extends FormRequest
+class SendTransferRequest extends FormRequest
 {
     public function rules(): array
     {
