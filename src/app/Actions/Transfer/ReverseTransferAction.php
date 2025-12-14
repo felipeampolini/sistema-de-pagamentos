@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Repositories\TransferRepository;
 use App\Validators\Transfer\ReverseTransferValidator;
 use Illuminate\Support\Facades\DB;
-use RuntimeException;
 
 class ReverseTransferAction
 {
@@ -27,17 +26,22 @@ class ReverseTransferAction
     {
 
         $transfer = $this->transferRepository->find($dto->transfer_id);
-        $this->validator->validate($transfer, $dto->receiver_id);
+        $sender = User::find($transfer->sender_id);
+        $receiver = User::find($transfer->receiver_id);
 
-        return DB::transaction(function () use ($transfer) {
+        $this->validator->validate($transfer, $receiver);
+
+        return DB::transaction(function () use ($transfer, $sender, $receiver) {
 
             $transfer->status = 'reversed';
             $transfer->reversed_at = now();
             $transfer->save();
 
-            $sender = User::find($transfer->sender_id);
             $sender->balance += $transfer->amount;
             $sender->save();
+
+            $receiver->balance -= $transfer->amount;
+            $receiver->save();
 
             return $transfer;
         });
