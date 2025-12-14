@@ -15,9 +15,9 @@ class WithdrawAction
 
     public function execute(User $user, float $amount): User
     {
-        return DB::transaction(function () use ($user, $amount) {
+        $this->validator->validate($user, $amount);
 
-            $this->validator->validate($user, $amount);
+        return DB::transaction(function () use ($user, $amount) {
 
             $user->balance -= $amount;
             $user->save();
