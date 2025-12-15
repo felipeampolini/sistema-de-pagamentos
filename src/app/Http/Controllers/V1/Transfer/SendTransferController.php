@@ -18,6 +18,24 @@ class SendTransferController extends Controller
         $this->service = $service;
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/transfer/send",
+     *     summary="Enviar transferência",
+     *     tags={"Transferências"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"receiver_id","amount"},
+     *             @OA\Property(property="receiver_id", type="integer", example=2),
+     *             @OA\Property(property="amount", type="number", example=75.00)
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Transferência realizada"),
+     *     @OA\Response(response=422, description="Erro na transferência")
+     * )
+     */
     public function __invoke(SendTransferRequest $request): JsonResponse
     {
         $user = JWTAuth::parseToken()->authenticate();

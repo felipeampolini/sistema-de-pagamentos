@@ -1,150 +1,213 @@
 # Sistema de Pagamentos
 
+![PHP](https://img.shields.io/badge/PHP-8.2-blue)
+![Laravel](https://img.shields.io/badge/Laravel-10-red)
+![Docker](https://img.shields.io/badge/Docker-Compose-blue)
+![MySQL](https://img.shields.io/badge/MySQL-8-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 ## Tecnologias Utilizadas
 
-- PHP 8.2
-- Laravel 10
-- Docker + Docker Compose
-- Nginx
-- MySQL 8
-- Composer
+Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-## Pré requisitos
+* PHP 8.2
+* Laravel 10
+* Docker e Docker Compose
+* Nginx
+* MySQL 8
+* Composer
 
-- Docker instalado e executando
+## Pré-requisitos
 
-------------------------------------------------------------------------
+Antes de iniciar, certifique-se de ter o seguinte item instalado e em execução:
+
+* Docker
+
+---
 
 ## Rodar o Projeto (Primeiro Setup)
 
-### 1 - Clone o repositório
+Siga os passos abaixo para configurar e executar o projeto localmente pela primeira vez.
 
-``` bash
+### 1 - Clonar o repositório
+
+```bash
 git clone https://github.com/felipeampolini/sistema-de-pagamentos.git
 cd sistema-de-pagamentos
 ```
 
-### 2 - Crie o arquivo .env
+### 2 - Criar o arquivo `.env`
 
-``` bash
+Copie o arquivo de exemplo para criar o arquivo de configuração de ambiente:
+
+```bash
 cp src/.env.example src/.env
 ```
 
-### 3 - Suba os containers
+### 3 - Subir os containers
 
-``` bash
+Execute o comando abaixo para construir e iniciar os containers:
+
+```bash
 docker compose up -d --build
 ```
 
-### 4 - Instale o Laravel dentro do container
+### 4 - Instalar as dependências do Laravel
 
-``` bash
+Instale as dependências do projeto dentro do container da aplicação:
+
+```bash
 docker compose exec app composer install
 ```
 
-### 5 - Gere a APP_KEY
+### 5 - Gerar a `APP_KEY`
 
-``` bash
+A `APP_KEY` é necessária para o funcionamento correto do Laravel:
+
+```bash
 docker compose exec app php artisan key:generate
 ```
 
-### 6 - Gere a JWT_KEY
+### 6 - Gerar a `JWT_KEY`
 
-``` bash
+Gere a chave utilizada para autenticação via JWT:
+
+```bash
 docker compose exec app php artisan jwt:secret
 ```
 
-### 7 - Ajuste permissões das pastas (se necessário)
+### 7 - Ajustar permissões de pastas (se necessário)
 
-``` bash
+Caso ocorra algum problema de permissão, execute o comando abaixo:
+
+```bash
 docker compose exec app chmod -R 777 storage bootstrap/cache
 ```
 
-### 8 - Rode as migrations
+### 8 - Executar as migrations
 
-``` bash
+Crie as tabelas no banco de dados:
+
+```bash
 docker compose exec app php artisan migrate
 ```
 
-### 9 - Acesse o projeto
+### 9 - Acessar o projeto
+
+Após finalizar o setup, a aplicação estará disponível em:
 
 [http://localhost:8080](http://localhost:8080)
 
-------------------------------------------------------------------------
+---
 
 ## Testes e Uso da API
 
-Para facilitar o teste manual de todos os endpoints disponíveis, uma coleção do Postman foi incluída no projeto.
+Para facilitar o teste manual de todos os endpoints disponíveis, o projeto inclui uma coleção do **Postman** e a documentação via **Swagger**.
 
-### 🚀 Importar Coleção do Postman
+### Importar Coleção do Postman
 
-Siga os passos abaixo para começar a testar:
+Siga os passos abaixo para começar a testar a API:
 
-1.  **Localize o arquivo:** A coleção está localizada no seguinte caminho dentro do repositório:
-    ```
-    docs/Sistema_Pagamentos.postman_collection.json
-    ```
+1. **Localizar o arquivo**
+   A coleção está disponível no seguinte caminho do repositório:
 
-2.  **Importe no Postman:**
-    *   Abra o [Postman](www.postman.com).
-    *   Clique no botão **"Import"** no canto superior esquerdo.
-    *   Selecione a opção "File" e aponte para o arquivo `.json` acima.
+   ```
+   postman/collections/Sistema_Pagamentos.postman_collection.json
+   ```
 
-3.  **Configurar Variáveis de Ambiente:** Certifique-se de configurar a variável de ambiente `baseUrl` (ou similar) no Postman para apontar para o endereço local da sua aplicação (ex: `http://localhost:8000` ou `http://127.0.0.1:8000`).
+2. **Importar no Postman**
 
------------
+   * Abra o [Postman](www.postman.com).
+   * Clique em **Import** no canto superior esquerdo.
+   * Selecione a opção **File** e escolha o arquivo `.json` informado acima.
+
+3. **Token JWT automático no login**
+   Após realizar o login, o token JWT é automaticamente salvo em uma variável de ambiente da coleção, facilitando o uso das demais rotas protegidas.
+
+### Acessar Swagger
+
+A documentação interativa da API pode ser acessada em:
+
+[http://localhost:8080/api/documentation](http://localhost:8080/api/documentation)
+
+---
+
+## Conectar no banco de dados com aplicativo externo
+
+Para acessar o banco de dados utilizando ferramentas como **DBeaver**, **HeidiSQL** ou similares, utilize as seguintes informações:
+
+* Host: `127.0.0.1`
+* Demais credenciais conforme definidas no arquivo `.env`:
+
+  * `DB_CONNECTION`
+  * `DB_PORT`
+  * `DB_DATABASE`
+  * `DB_USERNAME`
+  * `DB_PASSWORD`
+
+---
 
 ## Comandos úteis
 
-Reiniciar docker:
+Reiniciar os containers Docker:
 
-``` bash
+```bash
 docker compose restart
 ```
 
-Logs de processos em execução:
+Visualizar logs dos containers em execução:
 
-``` bash
+```bash
 docker compose logs -f
 ```
 
-Acessar bash do container:
+Acessar o terminal do container da aplicação:
 
-``` bash
+```bash
 docker compose exec app bash
 ```
 
-Dropar tables e recriar migrations
+Dropar todas as tabelas e recriar as migrations:
 
 ```bash
 docker compose exec app php artisan migrate:fresh
 ```
 
-------------------------------------------------------------------------
+---
 
 # Informações Adicionais
 
 ## Logs
 
-A aplicação contém logs de sucesso separados para ações do usuário `user.log` e ações de transferências `transfer.log`. Os logs de erros estão em `laravel.log`.
+A aplicação possui logs separados por contexto:
 
-Todos presentes em `src\storage\logs`.
+* `user.log`: ações relacionadas a usuários
+* `transfer.log`: ações relacionadas a transferências
+* `laravel.log`: logs de erro gerais da aplicação
 
-------------------------------------------------------------------------
+Todos os arquivos de log estão localizados em:
+
+```
+src/storage/logs
+```
+
+---
 
 ## Versionamento de Rotas
 
-A API adota o padrão de **Versionamento por URI**.
+A API utiliza o padrão de **versionamento por URI**.
 
-* Exemplo: `GET /api/v1/users/my-balance`
-* Exemplo: `POST /api/v1/transfer/send`
+Exemplos:
 
-A principal razão para usar o versionamento por URI é garantir a **compatibilidade retroativa** e facilitar a manutenção:
+* `GET /api/v1/users/my-balance`
+* `POST /api/v1/transfer/send`
 
-* **Evolução da API:** Permite o desenvolvimento de novas versões (`v2`, `v3`) com grandes alterações sem afetar clientes que ainda utilizam a `v1`.
-* **Clareza e Simplicidade:** É um método transparente e fácil de entender para quem consome a API, pois a versão é imediatamente visível na URL.
+Esse modelo foi adotado para garantir **compatibilidade retroativa** e facilitar a manutenção da API ao longo do tempo:
 
-------------------------------------------------------------------------
+* **Evolução da API:** permite a criação de novas versões (`v2`, `v3`, etc.) com mudanças significativas sem impactar clientes que utilizam versões anteriores.
+* **Clareza e simplicidade:** a versão da API é facilmente identificável diretamente na URL.
+
+---
 
 ## Licença
 

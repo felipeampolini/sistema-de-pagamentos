@@ -17,6 +17,23 @@ class ReverseTransferController extends Controller
         $this->service = $service;
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/transfer/reverse",
+     *     summary="Estornar transferência",
+     *     tags={"Transferências"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"transfer_id"},
+     *             @OA\Property(property="transfer_id", type="integer", example=10)
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Transferência estornada"),
+     *     @OA\Response(response=422, description="Não foi possível estornar")
+     * )
+     */
     public function __invoke(ReverseTransferRequest $request): JsonResponse
     {
         $dto = new ReverseTransferDTO($request->transfer_id, $request->user()->id);

@@ -16,6 +16,23 @@ class DepositController
         $this->service = $service;
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/users/deposit",
+     *     summary="Realizar depósito",
+     *     tags={"Usuários"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"amount"},
+     *             @OA\Property(property="amount", type="number", example=100.00)
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Depósito realizado"),
+     *     @OA\Response(response=422, description="Valor inválido")
+     * )
+     */
     public function __invoke(DepositRequest $request): JsonResponse
     {
         $user = Auth::user();

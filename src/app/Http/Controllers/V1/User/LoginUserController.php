@@ -17,6 +17,29 @@ class LoginUserController extends Controller
         $this->service = $service;
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/auth/login",
+     *     summary="Login do usuário",
+     *     tags={"Auth"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="password", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Login realizado",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(response=401, description="Credenciais inválidas")
+     * )
+     */
     public function __invoke(LoginUserRequest $request)
     {
 

@@ -17,7 +17,31 @@ class CreateUserController extends Controller
     }
 
     /**
-     * Endpoint para registrar um novo usuário
+     * @OA\Post(
+     *     path="/api/v1/users",
+     *     summary="Criar usuário",
+     *     tags={"Usuários"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","email","password","cpf_cnpj","type","phone","balance"},
+     *             @OA\Property(property="name", type="string", example="Felipe"),
+     *             @OA\Property(property="email", type="string", example="felipe@email.com"),
+     *             @OA\Property(property="password", type="string", example="123123123"),
+     *             @OA\Property(property="cpf_cnpj", type="string", example="12312312312"),
+     *             @OA\Property(
+     *                 property="type",
+     *                 type="string",
+     *                 enum={"common","merchant"},
+     *                 example="common"
+     *             ),
+     *             @OA\Property(property="phone", type="string", example="5549999999999"),
+     *             @OA\Property(property="balance", type="number", example=0)
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Usuário criado"),
+     *     @OA\Response(response=422, description="Erro de validação")
+     * )
      */
     public function __invoke(CreateUserRequest $request): JsonResponse
     {

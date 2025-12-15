@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Transfer\Authorizers;
+namespace App\Services\Authorizers;
 
 use App\Services\Authorizers\AuthorizerInterface;
 

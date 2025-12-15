@@ -16,6 +16,23 @@ class WithdrawController
         $this->service = $service;
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/users/withdraw",
+     *     summary="Realizar saque",
+     *     tags={"Usuários"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"amount"},
+     *             @OA\Property(property="amount", type="number", example=50.00)
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Saque realizado"),
+     *     @OA\Response(response=422, description="Saldo insuficiente")
+     * )
+     */
     public function __invoke(WithdrawRequest $request): JsonResponse
     {
         $user = Auth::user();
