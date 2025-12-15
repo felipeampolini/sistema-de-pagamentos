@@ -94,19 +94,13 @@ docker compose exec app php artisan migrate
 
 ### 9 - Acessar o projeto
 
-Após finalizar o setup, a aplicação estará disponível em:
+Após finalizar o setup, a documentação interativa da API pode ser acessada em:
 
-[http://localhost:8080](http://localhost:8080)
+[http://localhost:8080/api/documentation](http://localhost:8080/api/documentation)
 
----
+ou pode ser usado a collection do **Postman**. Como descrito abaixo:
 
-## Testes e Uso da API
-
-Para facilitar o teste manual de todos os endpoints disponíveis, o projeto inclui uma coleção do **Postman** e a documentação via **Swagger**.
-
-### Importar Coleção do Postman
-
-Siga os passos abaixo para começar a testar a API:
+## Importar Coleção do Postman
 
 1. **Localizar o arquivo**
    A coleção está disponível no seguinte caminho do repositório:
@@ -123,12 +117,6 @@ Siga os passos abaixo para começar a testar a API:
 
 3. **Token JWT automático no login**
    Após realizar o login, o token JWT é automaticamente salvo em uma variável de ambiente da coleção, facilitando o uso das demais rotas protegidas.
-
-### Acessar Swagger
-
-A documentação interativa da API pode ser acessada em:
-
-[http://localhost:8080/api/documentation](http://localhost:8080/api/documentation)
 
 ---
 
@@ -152,6 +140,21 @@ Adicionado uma imagem do modelo do banco em `db/sistema-pagamentos.png`
 ---
 
 ## Informações Adicionais
+
+### Porque laravel?
+
+Escolhi Laravel por sua robustez em segurança, boas práticas e facilidade de integração com front-end. Embora a interface não tenha sido finalizada, a API está totalmente funcional e pronta para consumo.
+
+### Pontos de melhora
+
+* Desenvolvimento de logout;
+* Recuperação de senha;
+* Enviar token de autenticacao via email ou apps de autenticacao (Google Authenticator, Authy, etc);
+* Table types, caso seja necessário gerenciar os tipos de usuarios;
+* Desenvolvimento da tela de login e cadastro;
+* Desenvolvimento de tela de transferências, com capacidade de filtrar transferências enviadas e recebidas, bem como, estornar, depositar, sacar e transferir para outro usuário;
+* Geração de relatórios de de extrato;
+* Sistema de permissoes para tipos de usuarios. Onde possa ser possível cadastrar permissoes como, `pode_transferir`, `pode_depositar`.
 
 ### Logs
 
@@ -210,6 +213,12 @@ Dropar todas as tabelas e recriar as migrations:
 
 ```bash
 docker compose exec app php artisan migrate:fresh
+```
+
+Gerar novamente documentation Swagger:
+
+```bash
+docker compose exec app php artisan l5-swagger:generate
 ```
 
 ---
