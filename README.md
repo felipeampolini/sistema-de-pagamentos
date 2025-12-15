@@ -145,7 +145,46 @@ Para acessar o banco de dados utilizando ferramentas como **DBeaver**, **HeidiSQ
   * `DB_USERNAME`
   * `DB_PASSWORD`
 
+## Diagram ER do BD
+
+Adicionado uma imagem do modelo do banco em `db/sistema-pagamentos.png`
+
 ---
+
+## Informações Adicionais
+
+### Logs
+
+A aplicação possui logs separados por contexto:
+
+* `user.log`: ações relacionadas a usuários
+* `transfer.log`: ações relacionadas a transferências
+* `laravel.log`: logs de erro gerais da aplicação
+
+Todos os arquivos de log estão localizados em:
+
+```
+src/storage/logs
+```
+
+---
+
+### Versionamento de Rotas
+
+A API utiliza o padrão de **versionamento por URI**.
+
+Exemplos:
+
+* `GET /api/v1/users/my-balance`
+* `POST /api/v1/transfer/send`
+
+Esse modelo foi adotado para garantir **compatibilidade retroativa** e facilitar a manutenção da API ao longo do tempo:
+
+* **Evolução da API:** permite a criação de novas versões (`v2`, `v3`, etc.) com mudanças significativas sem impactar clientes que utilizam versões anteriores.
+* **Clareza e simplicidade:** a versão da API é facilmente identificável diretamente na URL.
+
+---
+
 
 ## Comandos úteis
 
@@ -172,40 +211,6 @@ Dropar todas as tabelas e recriar as migrations:
 ```bash
 docker compose exec app php artisan migrate:fresh
 ```
-
----
-
-# Informações Adicionais
-
-## Logs
-
-A aplicação possui logs separados por contexto:
-
-* `user.log`: ações relacionadas a usuários
-* `transfer.log`: ações relacionadas a transferências
-* `laravel.log`: logs de erro gerais da aplicação
-
-Todos os arquivos de log estão localizados em:
-
-```
-src/storage/logs
-```
-
----
-
-## Versionamento de Rotas
-
-A API utiliza o padrão de **versionamento por URI**.
-
-Exemplos:
-
-* `GET /api/v1/users/my-balance`
-* `POST /api/v1/transfer/send`
-
-Esse modelo foi adotado para garantir **compatibilidade retroativa** e facilitar a manutenção da API ao longo do tempo:
-
-* **Evolução da API:** permite a criação de novas versões (`v2`, `v3`, etc.) com mudanças significativas sem impactar clientes que utilizam versões anteriores.
-* **Clareza e simplicidade:** a versão da API é facilmente identificável diretamente na URL.
 
 ---
 
